@@ -20,6 +20,13 @@ def my_numb():
 def win_numb():
     return random.sample(range(1, 51), 6)
 
+def win_money(player, winning):
+    hit = len(set(player) & set(winning))
+    return int(50 * (hit ** 3))
+
 print("Enter 6 diffrent numbers in range of 1-50.")
-print(my_numb())
-print(win_numb())
+player_numb = my_numb()
+winning_numb = win_numb()
+print(player_numb)
+print(winning_numb)
+print(f"You won: {win_money(player_numb, winning_numb)}")
