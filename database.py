@@ -64,6 +64,17 @@ def get_history(username):
     conn.close()
     return history
 
+def get_stats(username):
+    user_id = find_or_create_user(username)
+    conn = sqlite3.connect('lotto.db')
+    c = conn.cursor()   
+    c.execute("SELECT COUNT(*), SUM(prize) FROM play WHERE user_id = ?", (user_id,))
+    stats = c.fetchone()
+    count, total = stats
+    if total is None:
+        total = 0
+    conn.close()
+    return (count, total)
 
 if __name__ == '__main__':
     setup_database()
