@@ -40,6 +40,30 @@ def find_or_create_user(username):
     conn.close()
     return user_id
 
+def save_play(username, player_numbers, winning_numbers, prize):
+    user_id = find_or_create_user(username)
+    conn = sqlite3.connect('lotto.db')
+    c = conn.cursor()
+    player_str = ",".join(str(n) for n in player_numbers)
+    winning_str = ",".join(str(n) for n in winning_numbers)
+    c.execute("INSERT INTO play (user_id, player_numbers, winning_numbers, prize) VALUES (?, ?, ?, ?)", (user_id, player_str, winning_str, prize))
+    conn.commit()
+    conn.close()
+
+def get_history(username):
+    user_id = find_or_create_user(username)
+    conn = sqlite3.connect('lotto.db')
+    c = conn.cursor()
+    c.execute("SELECT player_numbers, winning_numbers, prize, played_at FROM play WHERE user_id = ? ORDER BY played_at DESC", (user_id,))
+    rows = c.fetchall()
+    history = []
+    for row in rows:
+        player_list = [int(n) for n in row[0].split(",")]
+        winning_list = [int(n) for n in row[1].split(",")]
+        history.append((player_list, winning_list, row[2], row[3]))
+    conn.close()
+    return history
+
 
 if __name__ == '__main__':
     setup_database()
