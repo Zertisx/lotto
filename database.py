@@ -76,5 +76,13 @@ def get_stats(username):
     conn.close()
     return (count, total)
 
+def get_all_plays():
+    conn = sqlite3.connect('lotto.db')
+    c = conn.cursor()
+    c.execute("SELECT users.username, play.player_numbers, play.prize, play.played_at FROM play JOIN users ON play.user_id = users.id ORDER BY play.played_at DESC")
+    rows = c.fetchall()    
+    conn.close()
+    return rows
+
 if __name__ == '__main__':
     setup_database()
