@@ -17,6 +17,21 @@ def get_player_numbers():
             numb.append(given_numb)
     return numb
 
+def is_valid_numbers(numbers):
+    if len(numbers) != 6:
+        return (False, "You must enter exactly 6 numbers.")
+    checked = []
+    for given_numb in numbers:
+        if not given_numb.isdigit():
+            return (False, "Please enter whole numbers only.")
+        n = int(given_numb)
+        if n < 1 or n > 49:
+            return (False, "Numbers must be in range 1-49.")
+        if n in checked:
+            return (False, "No duplicate numbers allowed")
+        checked.append(n)  
+    return (True, "")
+
 def get_winning_numbers():
     return random.sample(range(1, 50), 6)
 
